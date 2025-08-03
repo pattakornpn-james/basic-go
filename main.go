@@ -2,10 +2,12 @@ package main
 
 import (
 	"basic-go/config"
+	"basic-go/models"
+	"context"
 	"fmt"
 
-	_ "github.com/lib/pq"
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -14,6 +16,30 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	_ = psqlDB
-	fmt.Println("connect success")
+
+	docs, err := FetchDocument(psqlDB, context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	for _, doc := range docs {
+		fmt.Println("id", doc.Id)
+		fmt.Println("content", doc.Content)
+	}
+}
+
+func FetchDocument(db *sqlx.DB, ctx context.Context) ([]*models.Document, error) {
+	var docs = make([]*models.Document, 0)
+	query := `
+		SELECT
+			embedded_documents.id,
+			embedded_documents.content
+		FROM
+			embedded_documents
+	`
+	if err := db.SelectContext(ctx, &docs, query); err != nil {
+		return nil, err
+	}
+
+	return docs, nil
 }
