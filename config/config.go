@@ -65,7 +65,7 @@ type database struct {
 }
 
 func (c *database) EndPoint() string {
-	return fmt.Sprintf("postgres://%s:%s@%s:/%s%d?sslmode=%s", c.username, c.password, c.host, c.port, c.dbname, c.sslmode)
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s?sslmode=%s", c.username, c.password, c.host, c.port, c.dbname, c.sslmode)
 }
 
 func (c *database) Host() string {
