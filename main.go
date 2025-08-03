@@ -16,13 +16,18 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
-	abc, err := FetchUsers(psqlDB, context.Background())
+
+	users, err := FetchUsers(psqlDB, context.Background())
 	if err != nil {
 		panic(err)
 	}
-	for _, item := range abc {
-		fmt.Println(item)
+
+	for _, user := range users {
+		fmt.Println(user.Id)
+		fmt.Println(user.UserName)
+		fmt.Println(user.Email)
+		fmt.Println(user.FullName)
+		fmt.Println(user.CreatedAt)
 	}
 }
 
